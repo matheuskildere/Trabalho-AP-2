@@ -6,9 +6,11 @@ import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.SimpleEmail;
 
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.FileInputStream;
 import java.io.DataInputStream;
 
@@ -160,6 +162,7 @@ public class App {
             System.out.printf("\nCpf: ");
             people.setCpf(input2.nextLong());
             savePeople.writeLong(people.getCpf());
+            savePeople.writeLong(people.getCpf());
 
             savePeople.close();
         }
@@ -196,6 +199,12 @@ public class App {
                 int workloadFile = searchEvent.readInt();
                 searchEvent.close();
                 searchPeople.close();
+                
+                // Creat the certified HTML
+                PrintWriter contentHtml = new PrintWriter(new File("./certifieds/"+nameFile.replace(" ", "")+".html") );
+                contentHtml.write("<!DOCTYPE html><html><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><meta http-equiv='X-UA-Compatible' content='ie=edge'><title>Certificado</title></head><body><style>*{margin: 0;padding: 0;font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;}#container {background-image: url('background1.jpg');width:100%;height:100%;position: absolute;background-position: 55%;filter: blur(50px);}        #header {        width: 100%;        height: 10%;            position: relative;        background-color: rgba(44, 62, 71, 0.1);        text-align: center;        font-size: 25px;        line-height: 225%;     top:0;}#paper {width: 100%;height: 80%;position: relative;text-align: center;font-size: 25px;line-height: 50px;}#footer {width: 100%;height: 10%;position: absolute;background-color: rgba(1, 37, 54, 0.2);text-align: right;font-size: 85%;line-height: 150%;clear:both;bottom:0;text-decoration: none;}</style><div id = 'container'></div><div id = 'header' >Certificado</div><div id = 'paper' ><br /><br /><br /><br />Certificamos que <b>"+nameFile+"</b>,<br /> participou do evento <b>"+nameEventFile+"</b>, <br />realizado em <b> "+cityFile+" / "+ufFile.toUpperCase()+" </b>,<br /> de <b>"+dateInitialFile+"</b> a <b>"+dateEndFile+"</b>, totalizando uma carga horária de <b>"+workloadFile+"</b> horas.</div><div id = 'footer'>"+cityFile+" / "+ufFile.toUpperCase()+", "+certified.getDateTime()+" <br /> "+nameResponsibleFile+" <br />certified.getCodeUnit() <br /> </div></div></body></html>");
+                contentHtml.flush();
+                contentHtml.close();
                 // Creat the e-mail on HTML and send
                 String emailInstitution = "geradordecertificado94@gmail.com";
                 String passwordEmail = "geradordecertificado1";
@@ -209,7 +218,7 @@ public class App {
                     // E-mail subject
                     email.setSubject("CERTIFICADO DO EVENTO " + nameEventFile.toUpperCase());
                     email.setMsg("Olá " + nameFile
-                            + ". Segue em anexo certificado de sua partipação em "+nameEventFile+ ".\n ");
+                            + ". Segue em anexo certificado de sua partipação em "+nameEventFile+ ".\nLink para acesso: ");
                             
                     // People e-mail
                     email.addTo(emailFile);
