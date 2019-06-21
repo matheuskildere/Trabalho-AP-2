@@ -1,0 +1,245 @@
+package work2;
+
+import java.util.Scanner;
+
+import org.apache.commons.mail.DefaultAuthenticator;
+import org.apache.commons.mail.SimpleEmail;
+
+import java.io.DataOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.FileInputStream;
+import java.io.DataInputStream;
+
+
+public class App{
+    public static void main(String[] args) throws FileNotFoundException, IOException, InterruptedException {
+        // Auxiliar variable 
+        Boolean auxAnswer = false;
+
+        //Class Event
+        Event event = new Event();
+        Scanner input = new Scanner (System.in);
+
+        System.out.printf("\n------------------GERADOR DE CERTIFICADO------------------\n");
+        System.out.printf("\n-------INFORMAÇÕES DO EVENTO\n");
+
+        System.out.printf("\nTítulo do evento: ");
+        event.setNameEvent(input.nextLine());
+        
+        try{
+            // Checks if there are any event events already registered with the same name
+            FileInputStream fileRead = new FileInputStream("./events/"+event.getNameEvent()+".dat");
+            DataInputStream searchEvent = new DataInputStream(fileRead);
+            
+            // Read the contents and save in a variable
+            String arquivo = searchEvent.readUTF();
+            String cidade = searchEvent.readUTF();
+            String uf = searchEvent.readUTF();
+            
+            // Asks for a confirmation
+                System.out.printf("\nO evento '%s' já está registrado no sistema,\nfoi realizado na cidade %s- %s\n",arquivo, cidade, uf.toUpperCase());
+            do{    
+                System.out.printf("\nEra esse o evento que estava procurando? (sim/nao): ");
+                String answer = input.nextLine().toLowerCase();
+
+                if (answer.equals("sim")){
+                    auxAnswer = true;
+                }
+                if(answer.equals("nao")){
+                    auxAnswer = true;
+                    // Force an error, to enter the catch
+                    FileInputStream forceErro = new FileInputStream("./events/forceErro.dat");
+                    forceErro.close();
+                }
+                if (!answer.equals("sim") && !answer.equals("nao")){
+                    System.out.printf("\nOpção inválida, digite sim ou nao\n");
+                }
+            }while(auxAnswer == false);
+            searchEvent.close();
+
+        }catch(FileNotFoundException varException){
+            // Ask and Add event information
+            System.out.printf("\nAbaixo digite as informações do evento:\n");
+            new Thread().sleep(1000);
+            System.out.printf(".");
+            new Thread().sleep(1000);
+            System.out.printf("\n.");
+            new Thread().sleep(1000);
+            System.out.printf("\n.");
+            new Thread().sleep(1000);
+
+            // Save event in file bynare
+            FileOutputStream file = new FileOutputStream("./events/"+event.getNameEvent()+".dat");
+            DataOutputStream saveEvent = new DataOutputStream(file);
+            saveEvent.writeUTF(event.getNameEvent()); 
+
+            System.out.printf("\nCidade de realização: ");
+            event.setCity(input.nextLine());
+            saveEvent.writeUTF(event.getCity());
+    
+            System.out.printf("\nUf: ");
+            event.setUf(input.nextLine());
+            saveEvent.writeUTF(event.getUf());
+    
+            System.out.printf("\nData de início: ");
+            event.setDateInitial(input.nextLine());
+            saveEvent.writeUTF(event.getDateInitial());
+    
+            System.out.printf("\nData de termino: ");
+            event.setDateEnd(input.nextLine());
+            saveEvent.writeUTF(event.getDateEnd());
+    
+            System.out.printf("\nResponsável pelo evento: ");
+            event.setNameResponsible(input.nextLine());
+            saveEvent.writeUTF(event.getNameResponsible());
+    
+            System.out.printf("\nCarga horária: ");
+            event.setWorkload(input.nextInt());
+            saveEvent.writeInt(event.getWorkload());
+            
+            file.close();
+        }
+        System.out.printf("\n------INFORMAÇÕES DO PARTICIPANTE\n");
+
+        //Class Peopleemail
+        People people = new People();
+        Scanner input2 = new Scanner (System.in);
+        
+        System.out.printf("\nNome: ");
+        people.setName(input2.nextLine());
+
+        try{
+            //checks if there are any people already registered with the same name
+            FileInputStream filepRead = new FileInputStream("./peoples/"+people.getName()+".dat");
+            DataInputStream searchPeople = new DataInputStream(filepRead);
+            String name = searchPeople.readUTF();
+            String email = searchPeople.readUTF();
+            
+            System.out.printf("\nEcontramos ' %s ' registrado no sistema\ncom email %s\n", name,email);
+            auxAnswer = false;
+            do{    
+                System.out.printf("\nEsse era o participante que procurava? (sim/nao): ");
+                String answer = input.nextLine().toLowerCase();
+
+                if (answer.equals("sim")){
+                    auxAnswer = true;
+                }
+                if(answer.equals("nao")){
+                    auxAnswer = true;
+                    // Force an error, to enter the catch
+                    FileInputStream forceErro = new FileInputStream("./peoples/forceErro.dat");
+                    forceErro.close();
+                }
+                if (!answer.equals("sim") && !answer.equals("nao")){
+                    System.out.printf("\nOpção inválida, digite sim ou nao\n");
+                }
+            }while(auxAnswer == false);
+            searchPeople.close();
+        }catch(FileNotFoundException varException){
+            // Ask and Add people information
+            System.out.printf("\nAbaixo digite as informações da pessoa:\n");
+            new Thread().sleep(1000);
+            System.out.printf(".");
+            new Thread().sleep(1000);
+            System.out.printf("\n.");
+            new Thread().sleep(1000);
+            System.out.printf("\n.");
+            new Thread().sleep(1000);
+            
+            // Save people in file binary
+            FileOutputStream filePeople = new FileOutputStream("./peoples/"+people.getName()+".dat");
+            DataOutputStream savePeople = new DataOutputStream(filePeople);
+            savePeople.writeUTF(people.getName());
+
+            System.out.printf("\nEmail: ");
+            people.setEmail(input2.nextLine());
+            savePeople.writeUTF(people.getEmail());
+
+            System.out.printf("\nCpf: ");
+            people.setCpf(input2.nextLong());
+            savePeople.writeLong(people.getCpf());
+
+            savePeople.close();
+        }    
+
+        System.out.printf("\n------CONFIRMAÇÃO DO CERTIFICADO\n");
+        // Help whith do/while
+        auxAnswer = false;
+        do{    
+            System.out.printf("\nInformações obtidas com sucesso,\ndeseja emitir o certificado? (sim/nao): ");
+            String answer = input.nextLine().toLowerCase();
+
+            if (answer.equals("sim")){
+                Certified certified = new Certified();
+                // Time for send e-mail
+                System.out.printf("\nEmitindo certificado");
+                new Thread().sleep(1000);
+                System.out.printf("\n.");
+        
+                // Read people files to e-mail and save in a variable
+                FileInputStream filepRead = new FileInputStream("./peoples/"+people.getName()+".dat");
+                DataInputStream searchPeople = new DataInputStream(filepRead);
+                String nameFile = searchPeople.readUTF();
+                String emailFile = searchPeople.readUTF();
+
+                // Read event files to e-mail and save in a variable
+                FileInputStream fileRead = new FileInputStream("./events/"+event.getNameEvent()+".dat");
+                DataInputStream searchEvent = new DataInputStream(fileRead);
+                String nameEventFile = searchEvent.readUTF();
+                String cityFile = searchEvent.readUTF();
+                String ufFile = searchEvent.readUTF();
+                String dateInitialFile = searchEvent.readUTF();
+                String dateEndFile = searchEvent.readUTF();
+                String nameResponsibleFile = searchEvent.readUTF();
+                int workloadFile = searchEvent.readInt();
+                searchEvent.close();
+                searchPeople.close();
+                // Creat the e-mail on HTML and send
+                String emailInstitution = "geradordecertificado94@gmail.com";
+                String passwordEmail = "geradordecertificado1";
+                SimpleEmail email = new SimpleEmail();
+                email.setHostName("smtp.gmail.com");
+                email.setSmtpPort(465);
+                email.setAuthenticator(new DefaultAuthenticator(emailInstitution, passwordEmail));
+                email.setSSLOnConnect(true);
+                try {
+                    email.setFrom(emailInstitution);
+                    // E-mail subject
+                    email.setSubject("CERTIFICADO DO EVENTO "+ nameEventFile.toUpperCase());
+                    email.setMsg("Olá "+nameFile
+                        + ". Segue abaixo link para visualizar certificado e anexo do certificado em HTML.\n ");
+                    // People e-mail
+                    email.addTo(emailFile);
+                    email.send();            
+                    
+                    System.out.printf("\n.");
+                    new Thread().sleep(1000);
+                    System.out.printf("\n.");
+                    new Thread().sleep(1000);
+                    System.out.printf("\nCertificado emitido em %s\n",certified.getDateTime());   
+                } catch (Exception e) { 
+                    // Catch mensage
+                    System.out.print("Erro no dominio do email ou na sua conexão.\nPor favor, realize o processo novamente!");
+                }
+                // Leave do/while
+                auxAnswer = true;
+            }
+            if(answer.equals("nao")){
+                // Leave do/while
+                auxAnswer = true;
+            }
+            // If the answer is invalid
+            if (!answer.equals("sim") && !answer.equals("nao")){
+                System.out.printf("\nOpção inválida, digite sim ou nao\n");
+            }
+        }while(auxAnswer == false);
+        
+        System.out.printf("\n------------------FIM DO PROGRAMA------------------\n");
+        
+        input.close();
+        input2.close();
+
+    }
+}

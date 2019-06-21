@@ -8,6 +8,14 @@
             "type": "java",
             "name": "CodeLens (Launch) - App",
             "request": "launch",
+            "mainClass": "work2.App",
+            "projectName": "work2",
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - App",
+            "request": "launch",
             "mainClass": "App",
             "projectName": "Work2",
             "console": "integratedTerminal"

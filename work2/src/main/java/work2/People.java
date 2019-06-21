@@ -1,8 +1,9 @@
+package work2;
+
 public class People {
     private String name;
     private String email;
     private long cpf;
-
 
     public void setName(String name) {
         this.name = name;
@@ -15,6 +16,7 @@ public class People {
     public void setCpf(long cpf) {
         this.cpf = cpf;
     }
+
     public String getName() {
         return this.name;
     }
@@ -22,9 +24,9 @@ public class People {
     public long getCpf() {
         return this.cpf;
     }
+
     public String getEmail() {
         return this.email;
     }
-    
 
 }
