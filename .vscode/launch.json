@@ -2,6 +2,14 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - creatCode",
+            "request": "launch",
+            "mainClass": "work2.creatCode",
+            "projectName": "work2",
+            "console": "integratedTerminal"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - abrir",
             "request": "launch",
             "mainClass": "work2.abrir",

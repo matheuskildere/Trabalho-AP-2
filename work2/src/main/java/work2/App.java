@@ -1,10 +1,8 @@
 package work2;
 
 import java.util.Scanner;
-
 import org.apache.commons.mail.DefaultAuthenticator;
 import org.apache.commons.mail.SimpleEmail;
-
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,16 +12,30 @@ import java.io.PrintWriter;
 import java.io.FileInputStream;
 import java.io.DataInputStream;
 
+/**
+ * The {@code App} is the class main of this project.
+ * 
+ * An educational institution wants a system that
+ * facilitates the generation of certificates.
+ * 
+ * @author MatheusKildere
+ * @author BrandowMadeira
+ * @author WillianClemente
+ */
 public class App {
+    /**
+     * @param args the command line arguments
+     */
     public static void main(String[] args) throws FileNotFoundException, IOException, InterruptedException {
         // Auxiliar variable
         Boolean auxAnswer = false;
+
+        System.out.printf("\n------------------GERADOR DE CERTIFICADO------------------\n");
 
         // Class Event
         Event event = new Event();
         Scanner input = new Scanner(System.in);
 
-        System.out.printf("\n------------------GERADOR DE CERTIFICADO------------------\n");
         System.out.printf("\n-------INFORMAÇÕES DO EVENTO\n");
 
         System.out.printf("\nTítulo do evento: ");
@@ -103,11 +115,11 @@ public class App {
 
             file.close();
         }
-        System.out.printf("\n------INFORMAÇÕES DO PARTICIPANTE\n");
-
-        // Class Peopleemail
+        // Class People
         People people = new People();
         Scanner input2 = new Scanner(System.in);
+
+        System.out.printf("\n------INFORMAÇÕES DO PARTICIPANTE\n");
 
         System.out.printf("\nNome: ");
         people.setName(input2.nextLine());
@@ -121,6 +133,8 @@ public class App {
 
             System.out.printf("\nEcontramos ' %s ' registrado no sistema\ncom email %s\n", name, email);
             auxAnswer = false;
+
+            // Do/while to ensure correct answer about the participant
             do {
                 System.out.printf("\nEsse era o participante que procurava? (sim/nao): ");
                 String answer = input.nextLine().toLowerCase();
@@ -161,15 +175,18 @@ public class App {
 
             System.out.printf("\nCpf: ");
             people.setCpf(input2.nextLong());
-            savePeople.writeLong(people.getCpf());
+            
             savePeople.writeLong(people.getCpf());
 
             savePeople.close();
         }
 
         System.out.printf("\n------CONFIRMAÇÃO DO CERTIFICADO\n");
-        // Help whith do/while
+        
+        // Variable for help whith do/while
         auxAnswer = false;
+
+        // Do/while to ensure correct answer about the certificate
         do {
             System.out.printf("\nInformações obtidas com sucesso,\ndeseja emitir o certificado? (sim/nao): ");
             String answer = input.nextLine().toLowerCase();
@@ -202,9 +219,10 @@ public class App {
                 
                 // Creat the certified HTML
                 PrintWriter contentHtml = new PrintWriter(new File("./certifieds/"+nameFile.replace(" ", "")+".html") );
-                contentHtml.write("<!DOCTYPE html><html><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><meta http-equiv='X-UA-Compatible' content='ie=edge'><title>Certificado</title></head><body><style>*{margin: 0;padding: 0;font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;}#container {background-image: url('background1.jpg');width:100%;height:100%;position: absolute;background-position: 55%;filter: blur(50px);}        #header {        width: 100%;        height: 10%;            position: relative;        background-color: rgba(44, 62, 71, 0.1);        text-align: center;        font-size: 25px;        line-height: 225%;     top:0;}#paper {width: 100%;height: 80%;position: relative;text-align: center;font-size: 25px;line-height: 50px;}#footer {width: 100%;height: 10%;position: absolute;background-color: rgba(1, 37, 54, 0.2);text-align: right;font-size: 85%;line-height: 150%;clear:both;bottom:0;text-decoration: none;}</style><div id = 'container'></div><div id = 'header' >Certificado</div><div id = 'paper' ><br /><br /><br /><br />Certificamos que <b>"+nameFile+"</b>,<br /> participou do evento <b>"+nameEventFile+"</b>, <br />realizado em <b> "+cityFile+" / "+ufFile.toUpperCase()+" </b>,<br /> de <b>"+dateInitialFile+"</b> a <b>"+dateEndFile+"</b>, totalizando uma carga horária de <b>"+workloadFile+"</b> horas.</div><div id = 'footer'>"+cityFile+" / "+ufFile.toUpperCase()+", "+certified.getDateTime()+" <br /> "+nameResponsibleFile+" <br />certified.getCodeUnit() <br /> </div></div></body></html>");
+                contentHtml.write("<!DOCTYPE html><html><head><meta charset='UTF-8'><meta name='viewport' content='width=device-width, initial-scale=1.0'><meta http-equiv='X-UA-Compatible' content='ie=edge'><title>Certificado</title></head><body><style>*{margin: 0;padding: 0;font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;}#container {background-image: url('background1.jpg');width:100%;height:100%;position: absolute;background-position: 55%;filter: blur(50px);}        #header {        width: 100%;        height: 10%;            position: relative;        background-color: rgba(44, 62, 71, 0.1);        text-align: center;        font-size: 25px;        line-height: 225%;     top:0;}#paper {width: 100%;height: 80%;position: relative;text-align: center;font-size: 25px;line-height: 50px;}#footer {width: 100%;height: 10%;position: absolute;background-color: rgba(1, 37, 54, 0.2);text-align: right;font-size: 85%;line-height: 150%;clear:both;bottom:0;text-decoration: none;}</style><div id = 'container'></div><div id = 'header' >Certificado</div><div id = 'paper' ><br /><br /><br /><br />Certificamos que <b>"+nameFile+"</b>,<br /> participou do evento <b>"+nameEventFile+"</b>, <br />realizado em <b> "+cityFile+" / "+ufFile.toUpperCase()+" </b>,<br /> de <b>"+dateInitialFile+"</b> a <b>"+dateEndFile+"</b>, totalizando uma carga horária de <b>"+workloadFile+"</b> horas.</div><div id = 'footer'>"+cityFile+" / "+ufFile.toUpperCase()+", "+certified.getDateGeration()+" <br /> "+nameResponsibleFile+" <br /> "+certified.getCodeUnit()+"<br /> </div></div></body></html>");
                 contentHtml.flush();
                 contentHtml.close();
+
                 // Creat the e-mail on HTML and send
                 String emailInstitution = "geradordecertificado94@gmail.com";
                 String passwordEmail = "geradordecertificado1";
@@ -215,6 +233,7 @@ public class App {
                 email.setSSLOnConnect(true);
                 try {
                     email.setFrom(emailInstitution);
+
                     // E-mail subject
                     email.setSubject("CERTIFICADO DO EVENTO " + nameEventFile.toUpperCase());
                     email.setMsg("Olá " + nameFile
@@ -228,13 +247,14 @@ public class App {
                     new Thread().sleep(1000);
                     System.out.printf("\n.");
                     new Thread().sleep(1000);
-                    System.out.printf("\nCertificado emitido em %s\n", certified.getDateTime());
+                    System.out.printf("\nCertificado emitido em %s\n", certified.getCurrentDate());
                     
                 } catch (Exception e) {
                     // Catch mensage
                     System.out.print(
                             "Erro no dominio do email ou na sua conexão.\nPor favor, realize o processo novamente!");
                 }
+
                 // Leave do/while
                 auxAnswer = true;
             }
@@ -242,6 +262,7 @@ public class App {
                 // Leave do/while
                 auxAnswer = true;
             }
+
             // If the answer is invalid
             if (!answer.equals("sim") && !answer.equals("nao")) {
                 System.out.printf("\nOpção inválida, digite sim ou nao\n");
