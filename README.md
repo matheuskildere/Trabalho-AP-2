@@ -12,6 +12,7 @@ All information about the participants and events, are saved in binary files, so
 Languages ​​used:
 * JAVA
 * HTML
+* CSS
 
 Authors:
 * @matheuskildere
